@@ -1,0 +1,13 @@
+[
+  { "id": "t1", "nombre": "Darío", "foto": "/fotos/dario.jpg" },
+  { "id": "t2", "nombre": "Almudena", "foto": "/fotos/almudena.jpg" },
+  { "id": "t3", "nombre": "Rodrigo", "foto": "/fotos/rodrigo.jpg" },
+  { "id": "t4", "nombre": "Helena", "foto": "/fotos/helena.jpg" },
+  { "id": "t5", "nombre": "Lorenzo", "foto": "/fotos/lorenzo.jpg" },
+  { "id": "t6", "nombre": "Nieves", "foto": "/fotos/nieves.jpg" },
+  { "id": "t7", "nombre": "Juanpi", "foto": "/fotos/juanpi.jpg" },
+  { "id": "t8", "nombre": "Sandra", "foto": "/fotos/sandra.jpg" },
+  { "id": "t9", "nombre": "Gilbert", "foto": "/fotos/gilbert.jpg" },
+  { "id": "t10", "nombre": "Claudia", "foto": "/fotos/claudia.jpg" }
+
+]

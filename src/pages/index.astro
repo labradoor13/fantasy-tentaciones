@@ -1,11 +1,254 @@
 ---
-import Welcome from '../components/Welcome.astro';
-import Layout from '../layouts/Layout.astro';
+// --- Sección de Lógica (JavaScript/TypeScript) ---
+import tentadoresList from "../data/tentadores.json";
+import amigosList from "../data/amigos.json";
+import puntosData from "../data/puntos.json";
 
-// Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
-// Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
+// 1. Crear "mapas" para encontrar datos fácilmente
+// Un mapa de tentadores (id -> {nombre, foto})
+const tentadoresMap = new Map(tentadoresList.map((t) => [t.id, t]));
+
+// Un mapa de puntos (id -> puntos)
+const puntosMap = new Map(Object.entries(puntosData));
+
+// 2. Calcular el ranking
+const ranking = amigosList.map((amigo) => {
+  // Para cada amigo, buscamos sus dos picks
+  const pick1Id = amigo.picks[0];
+  const pick2Id = amigo.picks[1];
+
+  // Obtenemos los datos completos de cada pick
+  const pick1Data = tentadoresMap.get(pick1Id);
+  const pick2Data = tentadoresMap.get(pick2Id);
+
+  // Obtenemos los puntos de cada pick
+  const pick1Puntos = puntosMap.get(pick1Id) || 0;
+  const pick2Puntos = puntosMap.get(pick2Id) || 0;
+
+  // Calculamos el total
+  const totalPuntos = pick1Puntos + pick2Puntos;
+
+  // Devolvemos un objeto con toda la info del amigo
+  return {
+    nombre: amigo.nombre,
+    totalPuntos: totalPuntos,
+    picks: [
+      { ...pick1Data, puntos: pick1Puntos },
+      { ...pick2Data, puntos: pick2Puntos },
+    ],
+  };
+});
+
+// 3. Ordenar el ranking de mayor a menor
+ranking.sort((a, b) => b.totalPuntos - a.totalPuntos);
+
+// 4. Datos del sistema de puntuación
+const sistemaPuntuacion = [
+  { accion: "Alarma de la tentación", puntos: "1 punto" },
+  { accion: "Perreo", puntos: "1 punto" },
+  { accion: "Beso", puntos: "2 puntos" },
+  { accion: "Toqueteos en el jacuzzi", puntos: "2 puntos" },
+  { accion: "Follar", puntos: "5 puntos" },
+];
 ---
 
-<Layout>
-	<Welcome />
-</Layout>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="generator" content={Astro.generator} />
+    <title>Fantasy Tentaciones</title>
+  </head>
+  <body>
+    <main>
+      <h1>🏆 Fantasy de las Tentaciones 🏆</h1>
+
+      <h2>Clasificación General</h2>
+      <ol class="ranking-list">
+        {
+          ranking.map((amigo, index) => (
+            <li class="amigo-card">
+              <div class="amigo-header">
+                <span class="posicion">{index + 1}º</span>
+                <span class="nombre">{amigo.nombre}</span>
+                <span class="total-puntos">{amigo.totalPuntos} Puntos</span>
+              </div>
+              <div class="picks-container">
+                {amigo.picks.map((pick) => (
+                  <div class="pick-card">
+                    <img
+                      src={pick.foto}
+                      alt={`Foto de ${pick.nombre}`}
+                      width="100"
+                      height="100"
+                    />
+                    <strong>{pick.nombre}</strong>
+                    <span>{pick.puntos} pts</span>
+                  </div>
+                ))}
+              </div>
+            </li>
+          ))
+        }
+      </ol>
+
+      <h2>Sistema de Puntuación</h2>
+      <ul class="puntuacion-list">
+        {
+          sistemaPuntuacion.map((regla) => (
+            <li>
+              <span>{regla.accion}</span>
+              <strong>{regla.puntos}</strong>
+            </li>
+          ))
+        }
+      </ul>
+    </main>
+  </body>
+</html>
+
+<style>
+  :root {
+    font-family: system-ui, sans-serif;
+    background: linear-gradient(
+      to bottom,
+      #0a0e27 0%,
+      #1a1530 50%,
+      #2d1b3d 100%
+    );
+    color: #f0f0f0;
+    min-height: 100vh;
+  }
+  body {
+    margin: 0;
+    background: linear-gradient(
+      135deg,
+      rgba(26, 21, 48, 0.9) 0%,
+      rgba(45, 27, 61, 0.9) 100%
+    );
+  }
+  main {
+    max-width: 800px;
+    margin: auto;
+    padding: 1.5rem;
+  }
+  h1,
+  h2 {
+    color: #ff4d8f; /* Un color rosado "tentación" más vibrante */
+    text-align: center;
+    margin-bottom: 1.5rem;
+    text-shadow: 0 0 20px rgba(255, 77, 143, 0.5);
+  }
+
+  /* Lista de Ranking */
+  .ranking-list {
+    list-style: none;
+    padding: 0;
+  }
+  .amigo-card {
+    background: linear-gradient(
+      145deg,
+      rgba(30, 20, 45, 0.95) 0%,
+      rgba(45, 30, 60, 0.95) 100%
+    );
+    border-radius: 12px;
+    box-shadow:
+      0 8px 24px rgba(0, 0, 0, 0.4),
+      0 0 40px rgba(255, 77, 143, 0.1);
+    padding: 1rem;
+    margin-bottom: 1rem;
+    border: 1px solid rgba(255, 77, 143, 0.2);
+  }
+  .amigo-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 1.25rem;
+    font-weight: bold;
+    border-bottom: 1px solid rgba(255, 77, 143, 0.3);
+    padding-bottom: 0.75rem;
+    margin-bottom: 1rem;
+  }
+  .amigo-header .posicion {
+    color: #ff4d8f;
+    min-width: 30px;
+    text-shadow: 0 0 10px rgba(255, 77, 143, 0.5);
+  }
+  .amigo-header .nombre {
+    flex-grow: 1;
+    padding: 0 1rem;
+    color: #f0f0f0;
+  }
+  .amigo-header .total-puntos {
+    color: #4dd4ff;
+    text-shadow: 0 0 10px rgba(77, 212, 255, 0.5);
+  }
+
+  /* Tarjetas de Picks */
+  .picks-container {
+    display: flex;
+    justify-content: space-around;
+    gap: 1rem;
+  }
+  .pick-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: rgba(20, 15, 35, 0.8);
+    padding: 0.75rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+    border: 1px solid rgba(255, 77, 143, 0.2);
+  }
+  .pick-card img {
+    border-radius: 50%;
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    margin-bottom: 0.5rem;
+    border: 3px solid #ff4d8f;
+    box-shadow: 0 0 15px rgba(255, 77, 143, 0.6);
+  }
+  .pick-card strong {
+    font-size: 1rem;
+    color: #f0f0f0;
+  }
+  .pick-card span {
+    font-size: 0.9rem;
+    color: #4dd4ff;
+    font-weight: bold;
+    text-shadow: 0 0 8px rgba(77, 212, 255, 0.5);
+  }
+
+  /* Lista de Puntuación */
+  .puntuacion-list {
+    list-style: none;
+    padding: 0;
+    background: linear-gradient(
+      145deg,
+      rgba(30, 20, 45, 0.95) 0%,
+      rgba(45, 30, 60, 0.95) 100%
+    );
+    border-radius: 12px;
+    box-shadow:
+      0 8px 24px rgba(0, 0, 0, 0.4),
+      0 0 40px rgba(255, 77, 143, 0.1);
+    padding: 1rem;
+    border: 1px solid rgba(255, 77, 143, 0.2);
+  }
+  .puntuacion-list li {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid rgba(255, 77, 143, 0.2);
+    color: #e0e0e0;
+  }
+  .puntuacion-list li:last-child {
+    border-bottom: none;
+  }
+  .puntuacion-list li strong {
+    color: #4dd4ff;
+    text-shadow: 0 0 8px rgba(77, 212, 255, 0.5);
+  }
+</style>

@@ -1,0 +1,10 @@
+[
+  { "nombre": "Labrador", "picks": ["t4", "t10"] },
+  { "nombre": "Taeko", "picks": ["t2", "t4"] },
+  { "nombre": "Atom", "picks": ["t1", "t5"] },
+  { "nombre": "Faraway", "picks": ["t1", "t4"] },
+  { "nombre": "Irene", "picks": ["t2", "t4"] },
+  { "nombre": "Raulito", "picks": ["t1", "t5"] },
+  { "nombre": "Selena", "picks": ["t1", "t4"] },
+  { "nombre": "Trueno", "picks": ["t2", "t4"] }
+]
