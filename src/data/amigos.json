@@ -1,10 +1,10 @@
 [
   { "nombre": "Labrador", "picks": ["t4", "t10"] },
-  { "nombre": "Taeko", "picks": ["t2", "t4"] },
-  { "nombre": "Atom", "picks": ["t1", "t5"] },
-  { "nombre": "Faraway", "picks": ["t1", "t4"] },
-  { "nombre": "Irene", "picks": ["t2", "t4"] },
-  { "nombre": "Raulito", "picks": ["t1", "t5"] },
-  { "nombre": "Selena", "picks": ["t1", "t4"] },
-  { "nombre": "Trueno", "picks": ["t2", "t4"] }
+  { "nombre": "Taeko", "picks": ["t9", "t10"] },
+  { "nombre": "Atom", "picks": ["t2", "t9"] },
+  { "nombre": "Faraway", "picks": ["t3", "t10"] },
+  { "nombre": "Irene", "picks": ["t6", "t9"] },
+  { "nombre": "Raulito", "picks": ["t3", "t10"] },
+  { "nombre": "Selena", "picks": ["t7", "t10"] },
+  { "nombre": "Trueno", "picks": ["t1", "t9"] }
 ]
